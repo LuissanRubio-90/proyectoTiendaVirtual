@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito compras</title>
+    
+    <!--Font awesome iconos cdn-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <!--libreria css swiper slider-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.5/swiper-bundle.min.css" integrity="sha512-m3pAvNriL711NMlhkZHK6K4Tu2/RjtrzyjxZU8mlAbxxoDoURy27KajN1LGTLeEEPvaN12mKAgSCrYEwF9y0jA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--Mi estilo-->
+    <link rel="stylesheet" href="style.css" media="screen"/>
+    <link rel="stylesheet" href="Estilos.css" media="screen"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+</head>
+<body>
+    <!--Encabezado-->
+    <header id="header" class="shadow bg-light">
+        <nav class="container navbar">
+            <a href="/index.html" class="nav-brand text-dark">Mi Proyecto</a>
+
+            <!--Boton toggle-->
+            <button class="toggle-button">
+                <span><i class="fas fa-bars"></i></span>
+            </button>
+
+            <!--Boton collapse-->
+            <div class="collapse">
+                <ul class="navbar-nav">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="carritoCompras.html" class="nav-link">Mi carrito</a>
+                    <a href="#" class="nav-link">Quienes somos?</a>
+                    <a href="catalogoCompras.html" class="nav-link">Catalogo</a>
+                    <a href="categoria.html" class="nav-link">Categorias</a>
+                    <a href="#" class="nav-link">Contactenos</a>
+                </ul>
+            </div>
+
+            <!--Boton collapse-->
+            <div class="collapse">
+                <ul class="navbar-nav">
+                    <div class="search-box">
+                        <a href="#" class="nav-link"><i class="fas fa-search"></i></a>
+                    </div>
+                    <a href="#" class="nav-link"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="nav-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="nav-link"><i class="fab fa-instagram"></i></a>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <br>
+    <!--.Encabezado-->
+    <!--Sitio Principal-->
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            
+            <main id="items" class="col-sm-8 row"></main>
+            
+            <aside class="col-sm-4">
+                <h2>Mi Carrito de Compras</h2>                
+                <ul id="carrito" class="list-group"></ul>
+                <hr>
+                <p class="text-right">Total: $ <span id="total"></span></p>
+                <button id="boton-vaciar" class="btn btn-danger">Vaciar</button>
+            </aside>
+        </div>
+    </div>
+    <!--.Sitio Principal-->
+    <!--Pie de pagina-->
+       <footer id="footer">
+           <div class="container">
+               <!--Copyrights-->
+               <!--.Copyrights-->
+           </div>
+       </footer>
+       <br>
+       <br>
+    <!--.Pie de pagina-->
+    <!--archivo libreria js masonry para grid horizontal-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha512-JRlcvSZAXT8+5SQQAvklXGJuxXTouyq8oIMaYERZQasB8SBDHZaUbeASsJWpk0UUrf89DP3/aefPPrlMR1h1yQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--archivo libreria js swiper para slider-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.5/swiper-bundle.min.js" integrity="sha512-1LlEYE0qExJ/GUfAJ0k2K2fB5sIvMv/q6ueo3syohvQ3ElWDQVSMUOf39cxaDWHtNu7M6lF6ZC1H6A1m3SvheA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--archivo main.js-->
+    <script src="main.js"></script>
+    <!--script carrito-->
+    <script>
+        window.onload = function () {
+          
+          const baseDeDatos = [
+              {id: 1, nombre: 'Blusa-1', precio: 20.00, imagen: './contenido/1.jpg'},
+              {id: 2, nombre: 'Blusa-2',precio: 30.00, imagen: './contenido/2.jpg'},
+              {id: 3, nombre: 'Blusa-3', precio: 20.00, imagen: './contenido/3.jpg'},
+              {id: 4, nombre: 'Blusa-4', precio: 35.00, imagen: './contenido/4.jpg'},
+              {id: 5, nombre: 'Blusa-5', precio: 20.00, imagen: './contenido/5.jpg'},
+              {id: 6, nombre: 'Blusa-6', precio: 20.00, imagen: './contenido/6.jpg'},
+              {id: 7, nombre: 'Blusa-7', precio: 15.00, imagen: './contenido/7.jpg'},
+              {id: 8, nombre: 'Blusa-8', precio: 20.00, imagen: './contenido/8.jpg'},
+              {id: 9, nombre: 'Blusa-9', precio: 14.00, imagen: './contenido/9.jpg'},
+            ];
+
+          let carrito = [];          
+          let total = 0;
+          const DOMitems = document.querySelector('#items');
+          const DOMcarrito = document.querySelector('#carrito');
+          const DOMtotal = document.querySelector('#total');
+          const DOMbotonVaciar = document.querySelector('#boton-vaciar');
+
+          function renderizarProductos() {
+              
+                baseDeDatos.forEach((info) => {
+                  
+                  const miNodo = document.createElement('div');
+                  miNodo.classList.add('card', 'col-sm-4');
+                 
+                  const miNodoCardBody = document.createElement('div');
+                  miNodoCardBody.classList.add('card-body');
+                  
+                  const miNodoTitle = document.createElement('h5');
+                  miNodoTitle.classList.add('card-title');
+                  miNodoTitle.textContent = info.nombre;
+                  
+                  const miNodoImagen = document.createElement('img');
+                  miNodoImagen.classList.add('img-fluid');
+                  miNodoImagen.setAttribute('src', info.imagen);
+                  
+                  const miNodoPrecio = document.createElement('p');
+                  miNodoPrecio.classList.add('card-text');
+                  miNodoPrecio.textContent = '$' + info.precio;
+                  
+                  const miNodoBoton = document.createElement('button');
+                  miNodoBoton.classList.add('btn', 'btn-primary');
+                  miNodoBoton.textContent = '+';
+                  miNodoBoton.setAttribute('marcador', info.id);
+                  miNodoBoton.addEventListener('click', anyadirProductoAlCarrito);
+                  
+                  miNodoCardBody.appendChild(miNodoImagen);
+                  miNodoCardBody.appendChild(miNodoTitle);
+                  miNodoCardBody.appendChild(miNodoPrecio);
+                  miNodoCardBody.appendChild(miNodoBoton);
+                  miNodo.appendChild(miNodoCardBody);
+                  DOMitems.appendChild(miNodo);
+              });
+          }
+
+        
+          function anyadirProductoAlCarrito(evento) {              
+              
+              carrito.push(evento.target.getAttribute('marcador'))              
+              calcularTotal();             
+              renderizarCarrito();
+            }
+        
+          function renderizarCarrito() {              
+              
+            DOMcarrito.textContent = '';             
+              
+              const carritoSinDuplicados = [...new Set(carrito)];              
+              
+              carritoSinDuplicados.forEach((item) => {                  
+                  
+                const miItem = baseDeDatos.filter((itemBaseDatos) => {                      
+                      return itemBaseDatos.id === parseInt(item);
+                    });
+                  
+                  const numeroUnidadesItem = carrito.reduce((total, itemId) => {                      
+                      return itemId === item ? total += 1 : total;
+                    }, 0);
+                  
+                  const miNodo = document.createElement('li');
+
+                  miNodo.classList.add('list-group-item', 'text-right', 'mx-2');
+
+                  miNodo.textContent = `${numeroUnidadesItem} x ${miItem[0].nombre} - $ ${miItem[0].precio}`;
+                  
+                  const miBoton = document.createElement('button');
+
+                  miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+
+                  miBoton.textContent = 'X';
+
+                  miBoton.style.marginLeft = '1rem';
+
+                  miBoton.dataset.item = item;
+
+                  miBoton.addEventListener('click', borrarItemCarrito);
+                 
+                  miNodo.appendChild(miBoton);
+
+                  DOMcarrito.appendChild(miNodo);
+              });
+          }
+
+          
+          function borrarItemCarrito(evento) {
+              
+              const id = evento.target.dataset.item;
+              
+              carrito = carrito.filter((carritoId) => {
+                  return carritoId !== id;
+                });
+              
+              renderizarCarrito();
+              
+              calcularTotal();
+          }
+
+          
+          function calcularTotal() {
+              
+              total = 0;
+              
+              carrito.forEach((item) => {
+                  
+                  const miItem = baseDeDatos.filter((itemBaseDatos) => {
+                      return itemBaseDatos.id === parseInt(item);
+                  });
+
+                  total = total + miItem[0].precio;
+              });
+              
+              DOMtotal.textContent = total.toFixed(2);
+          }
+
+          
+          function vaciarCarrito() {
+              
+              carrito = [];
+              renderizarCarrito();
+              calcularTotal();
+          }
+
+           DOMbotonVaciar.addEventListener('click', vaciarCarrito);
+
+           renderizarProductos();
+        } 
+    </script>
+    
+</body>
+</html>
